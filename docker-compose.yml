@@ -1,0 +1,16 @@
+services:
+  app:
+    container_name: app
+    build: .
+    stop_signal: SIGINT
+  prometheus-server:
+    container_name: prometheus-server
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    image: prom/prometheus
+  grafana:
+    container_name: grafana
+#    image: grafana/grafana:8.0.4
+    image: uranix/grafana-with-dashboards
+    ports:
+      - "3000:3000"
