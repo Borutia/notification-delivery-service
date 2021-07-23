@@ -3,11 +3,15 @@ services:
     container_name: app
     build: .
     stop_signal: SIGINT
+    ports:
+      - "4567:4567"
   prometheus-server:
     container_name: prometheus-server
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     image: prom/prometheus
+    ports:
+      - "9090:9090"
   grafana:
     container_name: grafana
 #    image: grafana/grafana:8.0.4

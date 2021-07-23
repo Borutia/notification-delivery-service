@@ -4,18 +4,16 @@ import time
 
 from flask import Flask, request, abort
 from flask.json import jsonify
-
 from prometheus_client import REGISTRY
-
 from prometheus_flask_exporter import PrometheusMetrics
 
 from sender import SendQueue, SenderThread
-
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s [%(levelname)8s] %(message)s')
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
 registry = REGISTRY  # Use the default registry with process metrics
 metrics = PrometheusMetrics(app, registry=registry)
 
@@ -85,7 +83,7 @@ def send():
     for filter in filters.values():
         id = filter['id']
         compiled = filter['compiled']
-        if compiled.match(body) is not None:
+        if compiled.match(body):
             return jsonify({'message': 'forbidden by filter id=' + str(id)}), 400
     if not send_queue.accept(time.monotonic(), body):
         return jsonify({'message': 'the queue is full'}), 429
